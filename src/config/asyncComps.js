@@ -2,7 +2,7 @@
   将所有组件引入模块
 */
 import { lazy } from "react";
-
+const Test = () => lazy(() => import("@pages/Edu/Test"))
 const Admin = () => lazy(() => import("@pages/Admin"));
 const User = () => lazy(() => import("@pages/Acl/User"));
 const AddOrUpdateUser = () =>
@@ -37,4 +37,5 @@ export default {
   Teacher,
   Settings,
   Center,
+  Test
 };

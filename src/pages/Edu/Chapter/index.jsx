@@ -15,7 +15,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 
 import { connect } from "react-redux";
 import SearchForm from "./SearchForm";
-
+import {getLessonList} from './redux'
 import "./index.less";
 
 dayjs.extend(relativeTime);
@@ -27,10 +27,13 @@ dayjs.extend(relativeTime);
     //   state.course.permissionValueList,
     //   "Course"
     // )
-  })
+    chapterList: state.chapterList
+  }),
+  {getLessonList}
   // { getcourseList }
 )
 class Chapter extends Component {
+  
   state = {
     searchLoading: false,
     previewVisible: false,
@@ -89,14 +92,20 @@ class Chapter extends Component {
       selectedRowKeys,
     });
   };
+  handleExpand = async (expand, record) => {
+    if(expand) {
+      await this.props.getLessonList(record._id)
+      
+    }
+  } 
 
   render() {
     const { previewVisible, previewImage, selectedRowKeys } = this.state;
-
+    
     const columns = [
       {
         title: "章节名称",
-        dataIndex: "title",
+        dataIndex: 'title'
       },
       {
         title: "是否免费",
@@ -290,8 +299,9 @@ class Chapter extends Component {
           <Table
             rowSelection={rowSelection}
             columns={columns}
-            dataSource={data}
-            rowKey="id"
+            dataSource={this.props.chapterList.items}
+            rowKey="_id"
+            expandable = {{onExpand: this.handleExpand}}
           />
         </div>
 

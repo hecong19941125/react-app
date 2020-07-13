@@ -85,6 +85,7 @@ class Subject extends Component {
     this.handleCancel()
   }
   handleDel = (value) => () => {
+    
     confirm({
       title: <div>确定要删除<span style={{color:'red', fontSize: 20 }}>{value.title}</span>吗</div>,
       icon: <ExclamationCircleOutlined />,

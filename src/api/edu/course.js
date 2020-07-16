@@ -9,3 +9,4 @@ export function reqGetCourseList() {
     method: 'GET'
   })
 }
+

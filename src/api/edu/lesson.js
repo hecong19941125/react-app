@@ -9,3 +9,32 @@ export function reqGetLessonList(chapterId) {
     method: 'GET'
   })
 }
+export function reqGetQiNiuToken() {
+  return request({
+    url: '/uploadtoken',
+    method: 'GET'
+  })
+}
+
+export function reqAddLesson({chapterId, title, free, video}) {
+  return request({
+    url: `${BASE_URL}/save`,
+    method: 'POST',
+    data: {
+      chapterId,
+      title,
+      free,
+      video
+    }
+  })
+}
+
+export function reqBatchDelLesson(idList) {
+  return request({
+    url: `${BASE_URL}/batchRemove`,
+    method: 'DELETE',
+    data: {
+      idList
+    }
+  })
+}

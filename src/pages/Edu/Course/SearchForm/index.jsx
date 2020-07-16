@@ -1,54 +1,68 @@
-import React, { useState } from "react";
-import { Form, Input, Select, Cascader, Button } from "antd";
+import React, { useState, useEffect } from 'react'
+import { Form, Input, Select, Cascader, Button } from 'antd'
+import { reqGetAllTeacherList } from '@api/edu/teacher'
+import { reqGetAllSubjectList } from '@api/edu/subject'
+import './index.less'
 
-import "./index.less";
-
-const { Option } = Select;
+const { Option } = Select
 
 function SearchForm() {
-  const [form] = Form.useForm();
-
-  const [options, setOptions] = useState([
-    {
-      value: "zhejiang",
-      label: "Zhejiang",
-      isLeaf: false
-    },
-    {
-      value: "jiangsu",
-      label: "Jiangsu",
+  const [form] = Form.useForm()
+  const [teacherList, setTeacherList] = useState([])
+  const [subjectList, setSubjectList] = useState([])
+  // const [options, setOptions] = useState([
+  //   {
+  //     value: '',
+  //     label: '',
+  //     isLeaf: false
+  //   }
+  // ])
+  useEffect(() => {
+    async function fetchData() {
+      const [teacherList, subjectList] = await Promise.all([
+        reqGetAllTeacherList(),
+        reqGetAllSubjectList()
+      ])
+      setTeacherList(teacherList)
+      setSubjectList(subjectList)
+      console.log(subjectList)
+    }
+    fetchData()
+  }, [])
+  const options = subjectList.map((subject) => {
+    return {
+      value: subject._id,
+      label: subject.title,
       isLeaf: false
     }
-  ]);
-
+  })
   const onChange = (value, selectedOptions) => {
-    console.log(value, selectedOptions);
-  };
+    // console.log(value, selectedOptions);
+  }
 
-  const loadData = selectedOptions => {
-    const targetOption = selectedOptions[selectedOptions.length - 1];
-    targetOption.loading = true;
-
-    // load options lazily
-    setTimeout(() => {
-      targetOption.loading = false;
-      targetOption.children = [
-        {
-          label: `${targetOption.label} Dynamic 1`,
-          value: "dynamic1"
-        },
-        {
-          label: `${targetOption.label} Dynamic 2`,
-          value: "dynamic2"
-        }
-      ];
-      setOptions([...options]);
-    }, 1000);
-  };
+  const loadData = (selectedOptions) => {
+    // const targetOption = selectedOptions[selectedOptions.length - 1]
+    // targetOption.loading = true
+    // // load options lazily
+    // setTimeout(() => {
+    //   targetOption.loading = false
+    //   targetOption.children = [
+    //     {
+    //       label: `${targetOption.label} Dynamic 1`,
+    //       value: 'dynamic1'
+    //     },
+    //     {
+    //       label: `${targetOption.label} Dynamic 2`,
+    //       value: 'dynamic2'
+    //     }
+    //   ]
+    //   setOptions([...options])
+    // }, 1000)
+  }
 
   const resetForm = () => {
-    form.resetFields();
-  };
+    form.resetFields()
+  }
 
   return (
     <Form layout="inline" form={form}>
@@ -61,9 +75,11 @@ function SearchForm() {
           placeholder="课程讲师"
           style={{ width: 250, marginRight: 20 }}
         >
-          <Option value="lucy1">Lucy1</Option>
-          <Option value="lucy2">Lucy2</Option>
-          <Option value="lucy3">Lucy3</Option>
+          {teacherList.map((teacher) => (
+            <Option value={teacher._id} key={teacher._id}>
+              {teacher.name}
+            </Option>
+          ))}
         </Select>
       </Form.Item>
       <Form.Item name="subject" label="分类">
@@ -80,14 +96,14 @@ function SearchForm() {
         <Button
           type="primary"
           htmlType="submit"
-          style={{ margin: "0 10px 0 30px" }}
+          style={{ margin: '0 10px 0 30px' }}
         >
           查询
         </Button>
         <Button onClick={resetForm}>重置</Button>
       </Form.Item>
     </Form>
-  );
+  )
 }
 
-export default SearchForm;
+export default SearchForm

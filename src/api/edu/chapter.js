@@ -12,3 +12,13 @@ export function reqGetChapterList({page,limit,courseId}) {
     }
   })
 }
+
+export function reqBatchDelChapter(idList) {
+  return request({
+    url: `${BASE_URL}/batchRemove`,
+    method: 'DELETE',
+    data: {
+      idList
+    }
+  })
+}

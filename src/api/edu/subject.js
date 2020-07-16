@@ -30,7 +30,7 @@ export function reqAddSubjectList(title, parentId) {
 
 export function reqUpdateSubject(id, title) {
   return request({
-    url: `${BASE_URL}/update`,
+    url: `${BASE_URL}`,
     method: 'PUT',
     data: {
       id,
@@ -43,5 +43,12 @@ export function reqDelSubject(id) {
   return request({
     url: `${BASE_URL}/remove/${id}`,
     method: 'DELETE'
+  })
+}
+
+export function reqGetAllSubjectList() {
+  return request({
+    url: `${BASE_URL}`,
+    method: 'GET'
   })
 }

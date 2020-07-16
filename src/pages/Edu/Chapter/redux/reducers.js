@@ -1,4 +1,4 @@
-import { GET_CHAPTER_LIST, GET_LESSON_LIST } from './constant'
+import { GET_CHAPTER_LIST, GET_LESSON_LIST, BATCH_DEL_CHAPTER, BATCH_DEL_LESSON } from './constant'
 
 const initState = {
   total: 0,
@@ -21,8 +21,32 @@ export default function chapterList(prevState = initState, action) {
           }
         })
       }
-
       return { ...prevState }
+      case BATCH_DEL_CHAPTER:
+        let arr = prevState.items.filter(item => {
+          if(action.data.indexOf(item._id) > -1) {
+            return false
+          }
+          return true
+        })
+        
+      return {
+        ...prevState,
+        items: arr
+      }
+      case BATCH_DEL_LESSON:
+        prevState.items.forEach(chapter => {
+          let arr = chapter.children.filter(item => {
+            if(action.data.indexOf(item._id) > -1) {
+              return false
+            }
+            return true
+          })
+          chapter.children = arr
+        })
+      return {
+        ...prevState
+      }
     default:
       return prevState
   }

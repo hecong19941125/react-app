@@ -10,3 +10,15 @@ export function reqGetCourseList() {
   })
 }
 
+export function reqGetCourseCategoryList({page, limit, title, teacherId, subjectId, subjectParentId}) {
+  return request({
+    url: `${BASE_URL}/${page}/${limit}`,
+    method: 'GET',
+    params: {
+      title,
+      teacherId,
+      subjectId,
+      subjectParentId
+    }
+  })
+}
